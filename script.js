@@ -1,12 +1,24 @@
 let resultDisplay = document.querySelector(".result-number");
 
-let buttons = document.querySelectorAll(".button");
+let numbers = document.querySelectorAll(".number");
 
-let inputArray = [];
+let operators = document.querySelectorAll(".operator");
+
+let equal = document.querySelector(".equal");
+
+let reset = document.querySelector(".reset-btn");
+
+let operator = "";
+
+let firstNum = "";
+
+let secondNum = "";
 
 // main calculate function
 function calculate(operator, firstNum, secondNum) {
   let result;
+  firstNum = Number(firstNum);
+  secondNum = Number(secondNum);
   switch (operator) {
     case "+":
       result = add(firstNum, secondNum);
@@ -43,10 +55,42 @@ function multiply(num1, num2) {
   return num1 * num2;
 }
 
-buttons.forEach((button) =>
+function handleNumber(num) {
+  if (firstNum.length <= 5) {
+    secondNum += num;
+  }
+}
+
+numbers.forEach((button) =>
   button.addEventListener("click", (e) => {
-    resultDisplay.textContent += e.target.value;
-    inputArray.push(resultDisplay.textContent);
-    console.log(inputArray);
+    handleNumber(e.target.textContent);
+    resultDisplay.textContent = secondNum;
   })
 );
+
+function handleOperator(op) {
+  operator = op;
+  firstNum = secondNum;
+  secondNum = "";
+
+  resultDisplay.textContent += operator;
+}
+
+operators.forEach((op) =>
+  op.addEventListener("click", (e) => {
+    handleOperator(e.target.value);
+  })
+);
+
+reset.addEventListener("click", () => {
+  secondNum = "";
+  firstNum = "";
+  operator = "";
+  resultDisplay.textContent = "";
+});
+
+// SUm
+
+equal.addEventListener("click", () => {
+  resultDisplay.textContent = calculate(operator, firstNum, secondNum);
+});
